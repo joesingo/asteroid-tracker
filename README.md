@@ -1,6 +1,8 @@
 # Asteroid Tracker
 
-## Installation notes
+**TODO:** description
+
+## Installation
 
 * Set up a tom_education instance
 * Add `html_info` to `EXTRA_FIELDS` in `settings.py`
@@ -10,10 +12,9 @@ EXTRA_FIELDS = [
 ]
 ```
 * Create targets and populate `html_info` in tags section
-* Create observation template for each target
-* Find target and template PKs from the target detail and observation form URLs
-  respectively.
-* Create `config.yaml` with the following keys:
+* Create an observation template for each target
+* Create `config.yaml` as follows (change the target and template PKs as
+  appropriate):
 ```yaml
 tom_education_url: "http://localhost:8000",
 targets:
@@ -25,7 +26,7 @@ targets:
 ```
 * Set `CORS_ORIGIN_WHITELIST` in `settings.py` to include the host from which
   Asteroid Tracker will be hosted (alternatively, set `CORS_ORIGIN_ALLOW_ALL`
-  to `True`).
+  to `True`):
 ```python
 CORS_ORIGIN_WHITELIST = [
     'http://localhost:5000',
