@@ -4,7 +4,12 @@
 
 ## Installation
 
-* Set up a tom_education instance
+* Install this package:
+```
+$ git clone <this repo>
+$ pip install asteroid-tracker/
+```
+* Set up a [tom_education](https://github.com/joesingo/tom_education) instance
 * Add `html_info` to `EXTRA_FIELDS` in `settings.py`
 ```python
 EXTRA_FIELDS = [
@@ -34,7 +39,7 @@ CORS_ORIGIN_WHITELIST = [
 ```
 * Export your asteroid tracker instance as a static website:
 ```
-$ asteroid-tracker <path to config.yaml> <output dir>
+$ ast-tracker <path to config.yaml> <output dir>
 ```
 * (Optional) Serve the site with built-in Python HTTP server:
 ```
