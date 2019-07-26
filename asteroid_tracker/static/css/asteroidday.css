@@ -1,0 +1,183 @@
+
+html, body{
+  height:100%;
+  background:#faf6eb url('../images/asteroidday_lg_bg.jpg') no-repeat bottom left fixed;
+  color:#7c6e64;
+}
+
+@media (max-width: 768px) {
+  html, body{
+    height:100%;
+    background:#faf6eb no-repeat 0 0;
+  }
+}
+
+h1, h2, h3, h4, h5 {
+  text-align: center;
+  color: #dd5f32;;
+}
+
+p {
+  font-size: 18px;
+  line-height: 1.5em;
+  margin: 0 0 30px;
+}
+
+.big-icon {
+  text-align:center;
+    font-size: 75px;
+}
+
+.navbar .logo img {max-height:25px;}
+
+.masthead {color:#dd5f32;}
+
+.topbar {background:#eaede8 none repeat scroll 0 0;}
+
+footer { padding-top:50px;text-align: center;}
+
+.lead { text-align: center;}
+
+ .panels .panel-item:first-child .panel-image {
+     margin-top: 45px
+     color: #aaa;
+ }
+
+ .panel.panel-image {
+     margin-bottom: 0;
+     position: relative;
+     display: block;
+     text-decoration: none;
+     -webkit-border-radius: 10px;
+     -moz-border-radius: 10px;
+     -ms-border-radius: 10px;
+     -o-border-radius: 10px;
+     border-radius: 10px;
+     -webkit-box-shadow: none;
+     -moz-box-shadow: none;
+     box-shadow: none;
+     margin-top: 90px;
+     border: none;
+ }
+
+ .panel.panel-image:hover {
+     text-decoration: none
+ }
+
+ .panel.panel-image .panel-body {
+     padding: 30px
+ }
+
+ .panel.panel-image .panel-body p {
+     color: #676f7a;
+     line-height: 22px;
+     margin: 0
+ }
+
+ .panel.panel-image .panel-body .panel-title {
+     font-weight: 500;
+     font-size: 22px;
+     margin: 0 0 20px 0
+ }
+
+ .panel.panel-image .panel-icon {
+     -webkit-transition: top 300ms;
+     -moz-transition: top 300ms;
+     -o-transition: top 300ms;
+     transition: top 300ms
+ }
+
+ @media (min-width: 768px) {
+     .panel.panel-image {
+         margin-top: 45px
+     }
+ }
+
+ .panel.panel-image .panel-icon {
+     position: absolute;
+     top: -45px;
+     left: 50%;
+     margin-left: -45px;
+     text-align: center;
+     line-height: 90px;
+     width: 90px;
+     height: 90px
+ }
+
+ .panel.panel-image .panel-icon .icon {
+     background-color: #dd5f32;
+     border: 10px solid white;
+     color: white;
+     display: inline-block;
+     font-size: 45px;
+     line-height: 70px;
+     -webkit-border-radius: 50%;
+     -moz-border-radius: 50%;
+     -ms-border-radius: 50%;
+     -o-border-radius: 50%;
+     border-radius: 50%;
+     width: 90px;
+     height: 90px
+ }
+
+ .panel.panel-image .panel-heading {
+     padding: 0;
+     border: none;
+     max-height: 125px;
+     overflow: hidden;
+     -moz-border-radius-topleft: 10px;
+     -webkit-border-top-left-radius: 10px;
+     border-top-left-radius: 10px;
+     -moz-border-radius-topright: 10px;
+     -webkit-border-top-right-radius: 10px;
+     border-top-right-radius: 10px
+ }
+
+ .panel.panel-image .panel-heading img {
+     display: block;
+     height: auto;
+     max-width: 100%;
+     -moz-border-radius-topleft: 10px;
+     -webkit-border-top-left-radius: 10px;
+     border-top-left-radius: 10px;
+     -moz-border-radius-topright: 10px;
+     -webkit-border-top-right-radius: 10px;
+     border-top-right-radius: 10px
+ }
+
+ .panel.panel-image .panel-body {
+     background-color: #eaede8;
+     border: 2px solid #eaedf2;
+     padding-top: 5px;
+     border-top: none;
+     text-align: center;
+     -moz-border-radius-bottomleft: 10px;
+     -webkit-border-bottom-left-radius: 10px;
+     border-bottom-left-radius: 10px;
+     -moz-border-radius-bottomright: 10px;
+     -webkit-border-bottom-right-radius: 10px;
+     border-bottom-right-radius: 10px
+ }
+
+ .panel.panel-image .panel-body .panel-title {
+     margin: 20px 0;
+     color: #434955
+ }
+
+ .panel.panel-image:hover .panel-icon {
+     top: -43.2px
+ }
+
+ @media (min-width: 992px) {
+     .panel.panel-image:hover .panel-icon {
+         top: -54px
+     }
+ }
+
+ .lt-ie9 .panel.panel-image .panel-heading img {
+     max-height: 141px
+ }
+
+ .panels .panel-item:first-child .panel-big {
+     margin-top: 30px
+ }
