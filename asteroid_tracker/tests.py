@@ -1,5 +1,6 @@
 from unittest.mock import patch
 
+import jinja2
 import pytest
 import yaml
 
@@ -126,3 +127,23 @@ class TestSiteBuilder:
                 "teaser": "",
             }]
         }
+
+    def test_build_site(self, config, tmp_path):
+        config.targets = []
+        builder = SiteBuilder(config)
+
+        template = jinja2.Template("{{ var }}")
+        with patch("asteroid_tracker.build_site.SiteBuilder.get_pages") as mock:
+            mock.return_value = [
+                Page(name="", template=template, context={"var": "home page"}),
+                Page(name="mypage", template=template, context={"var": "hello"}),
+            ]
+            builder.build_site(tmp_path)
+
+        home = tmp_path / "index.html"
+        assert home.exists()
+        assert home.read_text() == "home page"
+
+        page = tmp_path / "mypage" / "index.html"
+        assert page.exists()
+        assert page.read_text() == "hello"
