@@ -132,7 +132,7 @@ class SiteBuilder:
             context=home_context
         )
 
-def main():
+def main():  # pragma: no cover
     parser = argparse.ArgumentParser(
         description="Create a static site to view and create timelapses of "
                     "asteroids using an instance of the TOM Toolkit"
@@ -155,5 +155,5 @@ def main():
     except AsteroidTrackerError as ex:
         parser.error(ex)
 
-if __name__ == "__main__":
+if __name__ == "__main__":  # pragma: no cover
     main()
