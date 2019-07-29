@@ -7,7 +7,7 @@
 * Install this package:
 ```
 $ git clone <this repo>
-$ pip install asteroid-tracker/
+$ pip install asteroid-tracker
 ```
 * Set up a [tom_education](https://github.com/joesingo/tom_education) instance
 * Add `html_info` to `EXTRA_FIELDS` in `settings.py`
@@ -48,4 +48,16 @@ $ ast-tracker <path to config.yaml> <output dir>
 ```
 $ cd <output dir>
 $ python3 -m http.server
+```
+
+## Testing
+
+The tests are written with
+[pytest](https://docs.pytest.org/en/latest/index.html). To run them...
+
+```
+$ # Install test dependencies
+$ pip install asteroid-tracker[test]
+$ # Run tests
+$ pytest asteroid_tracker/asteroid_tracker/tests.py
 ```
