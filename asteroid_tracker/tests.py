@@ -59,6 +59,10 @@ class TestSiteBuilder:
             targets=[dict(pk=1, template=1, preview_image="img", teaser="teaser")]
         )
 
+    @pytest.fixture
+    def builder(self, config):
+        return SiteBuilder(config)
+
     def test_url_trailing_slash(self, config):
         # Trailing slash should be removed
         config.tom_education_url = "http://slash.net/"
@@ -186,3 +190,18 @@ class TestSiteBuilder:
         out_preview = out_images / "42.jpg"
         assert out_preview.exists()
         assert out_preview.read_text() == "this is totally a JPEG"
+
+    def test_static_dir_already_exist(self, builder, tmp_path):
+        # Make static dir with a file already in it
+        outdir = tmp_path / "out"
+        outdir.mkdir()
+        static = outdir / "static"
+        static.mkdir()
+        (static / "sneakyfile.txt").write_text("this should be deleted")
+
+        builder.config.targets = []
+        with patch("asteroid_tracker.build_site.SiteBuilder.get_pages", return_value=[]):
+            builder.build_site(outdir)
+
+        assert static.exists()
+        assert not (static / "sneakyfile.txt").exists()
