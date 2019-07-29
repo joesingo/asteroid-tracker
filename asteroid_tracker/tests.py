@@ -40,3 +40,21 @@ class TestConfig:
         config = SiteBuilder.parse_config(p)
         assert config.tom_education_url == "url"
         assert config.targets == [Target(pk=1, template=3, preview_image="img")]
+
+class TestSiteBuilder:
+    @pytest.fixture
+    def config(self):
+        return Config(
+            tom_education_url="someurl",
+            targets=[dict(pk=1, template=1, preview_image="img", teaser="teaser")]
+        )
+
+    def test_url_trailing_slash(self, config):
+        # Trailing slash should be removed
+        config.tom_education_url = "http://slash.net/"
+        builder1 = SiteBuilder(config)
+        assert builder1.base_url == "http://slash.net"
+        # ... but only if present
+        config.tom_education_url = "http://noslash.net"
+        builder2 = SiteBuilder(config)
+        assert builder2.base_url == "http://noslash.net"
