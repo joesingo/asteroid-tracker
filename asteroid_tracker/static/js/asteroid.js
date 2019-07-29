@@ -31,7 +31,9 @@ class AsteroidApp {
 
         var $info_section = $("#asteroid-info");
         // TODO: consider if injecting HTML directly like this is safe against XSS
-        $info_section.html(data.target.extra_fields.html_info || "No information available!");
+        var markdown = data.target.extra_fields.target_info || "No information available!";
+        var converter = new showdown.Converter();
+        $info_section.html(converter.makeHtml(markdown));
 
         // Timelapses
         var $timelapse_area = $("#asteroid-timelapses");

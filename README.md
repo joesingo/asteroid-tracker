@@ -10,13 +10,13 @@ $ git clone <this repo>
 $ pip install asteroid-tracker
 ```
 * Set up a [tom_education](https://github.com/joesingo/tom_education) instance
-* Add `html_info` to `EXTRA_FIELDS` in `settings.py`
+* Add `target_info` to `EXTRA_FIELDS` in `settings.py`
 ```python
 EXTRA_FIELDS = [
-    {'name': 'html_info', 'type': 'string'}
+    {'name': 'target_info', 'type': 'string'}
 ]
 ```
-* Create targets and populate `html_info` in tags section
+* Create targets and populate `target_info` in tags section
 * Create an observation template for each target
 * Create `config.yaml` as follows (change the target and template PKs as
   appropriate):
