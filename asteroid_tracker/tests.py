@@ -2,9 +2,11 @@ import pytest
 import yaml
 
 from asteroid_tracker import (
+    InvalidConfigError,
     Config,
     SiteBuilder,
     Target,
+    TomConnectionError
 )
 
 class TestConfig:
@@ -14,9 +16,11 @@ class TestConfig:
         {"tom_education_url": "blah"},
         {"tom_education_url": "blah", "targets": ["hello"]},
     ])
-    def test_invalid_configs(self, config):
-        with pytest.raises(TypeError):
-            Config(**config)
+    def test_invalid_configs(self, config, tmp_path):
+        p = tmp_path / "c.yaml"
+        p.write_text(yaml.dump(config))
+        with pytest.raises(InvalidConfigError):
+            SiteBuilder.parse_config(p)
 
     # Test valid configs
     @pytest.mark.parametrize("config", [
@@ -25,11 +29,13 @@ class TestConfig:
         {"tom_education_url": "hello", "targets": [{"pk": 1, "template": 3, "preview_image": "s",
                                                     "teaser": "hello"}]},
     ])
-    def test_valid_configs(self, config):
+    def test_valid_configs(self, config, tmp_path):
+        p = tmp_path / "c.yaml"
+        p.write_text(yaml.dump(config))
         try:
-            Config(**config)
-        except TypeError as ex:
-            assert False, f"TypeError incorrectly raised: {ex}"
+            SiteBuilder.parse_config(p)
+        except InvalidConfigError as ex:
+            assert False, f"InvalidConfigError incorrectly raised: {ex}"
 
     def test_parse_config(self, tmp_path):
         p = tmp_path / "c.yaml"
@@ -58,3 +64,10 @@ class TestSiteBuilder:
         config.tom_education_url = "http://noslash.net"
         builder2 = SiteBuilder(config)
         assert builder2.base_url == "http://noslash.net"
+
+    def test_could_not_connect_to_tom(self, config, tmp_path):
+        config.tom_education_url = "http://somethingmadeup"
+        builder = SiteBuilder(config)
+        with pytest.raises(TomConnectionError) as excinfo:
+            builder.build_site(tmp_path)
+            assert excinfo.value == "Could not connect to TOM at 'somethingmadeup'"

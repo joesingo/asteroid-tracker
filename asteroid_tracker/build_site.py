@@ -11,6 +11,12 @@ import yaml
 import jinja2
 import requests
 
+from asteroid_tracker.exceptions import (
+    AsteroidTrackerError,
+    InvalidConfigError,
+    TomConnectionError,
+)
+
 def current_year():
     return datetime.now().strftime("%Y")
 
@@ -64,7 +70,10 @@ class SiteBuilder:
     @classmethod
     def parse_config(cls, path: Path) -> Config:
         config_dict = yaml.safe_load(path.read_text())
-        return Config(**config_dict)
+        try:
+            return Config(**config_dict)
+        except TypeError as ex:
+            raise InvalidConfigError(f"Invalid config: {ex}")
 
     def build_site(self, outdir):
         outdir.mkdir(exist_ok=True)
@@ -94,7 +103,11 @@ class SiteBuilder:
         target_template = self.env.get_template("asteroid.html.tmpl")
         for target in self.config.targets:
             api_url = f"/api/target/{target.pk}/"
-            response = requests.get(self.base_url + api_url)
+            url = self.base_url + api_url
+            try:
+                response = requests.get(url)
+            except requests.exceptions.ConnectionError:
+                raise TomConnectionError(f"Could not connect to TOM at '{url}'")
             details = response.json()
 
             identifier = details["target"]["identifier"]
@@ -135,15 +148,12 @@ def main():
         type=Path
     )
     args = parser.parse_args(sys.argv[1:])
-
     try:
         config = SiteBuilder.parse_config(args.config)
-    except TypeError as ex:
-        parser.error(f"Invalid config: {ex}")
-        return
-
-    builder = SiteBuilder(config)
-    builder.build_site(args.output_directory)
+        builder = SiteBuilder(config)
+        builder.build_site(args.output_directory)
+    except AsteroidTrackerError as ex:
+        parser.error(ex)
 
 if __name__ == "__main__":
     main()
