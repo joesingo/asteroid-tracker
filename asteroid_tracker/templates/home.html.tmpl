@@ -1,0 +1,35 @@
+{% extends "base.html.tmpl" %}
+{% block main %}
+<h1 class="masthead">Asteroid Tracker</h1>
+
+<p class="lead">
+    Join our international campaign to observe Near Earth Asteroids with Las
+    Cumbres Observatory.
+    <br/>
+    Click the asteroids below to see timelapses created by over 500 citizen
+    scientists!
+</p>
+
+<div class="panels-wrapper">
+    <div class="row panels">
+        <h3>Active Asteroid Campaigns</h3>
+        {% for target in targets %}
+            <div class="col-sm-6 panel-item">
+                <a href="{{ target.url }}" class="panel panel-image">
+                    <div class="panel-icon">
+                        <i class="fa fa-cog icon"></i>
+                    </div>
+                    <div class="panel-heading">
+                        <img height="141" src="/static/previews/{{ target.image_name }}"
+                             alt="{{ target.name }}" class="img-responsive-sm" />
+                    </div>
+                    <div class="panel-body">
+                        <h3 class="panel-title">{{ target.name }}</h3>
+                        <p>{{ target.teaser }}</p>
+                    </div>
+                </a>
+            </div>
+        {% endfor %}
+    </div>
+</div>
+{% endblock %}

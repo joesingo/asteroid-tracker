@@ -25,9 +25,12 @@ tom_education_url: "http://localhost:8000",
 targets:
   - pk: 1
     template: 1
+    preview_image: /path/to/image.png
+    teaser: This text is shown on the homepage
 
   - pk: 2
     template: 1
+    preview_image: /path/to/another/image.png
 ```
 * Set `CORS_ORIGIN_WHITELIST` in `settings.py` to include the host from which
   Asteroid Tracker will be hosted (alternatively, set `CORS_ORIGIN_ALLOW_ALL`
