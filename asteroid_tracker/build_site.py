@@ -5,6 +5,7 @@ import os.path
 from pathlib import Path
 import sys
 import shutil
+from typing import Dict, List
 
 import yaml
 import jinja2
@@ -29,16 +30,24 @@ class Target:
         return f"{self.pk}{suffix}"
 
 @dataclass
+class Config:
+    tom_education_url: str
+    targets: List[Target]
+
+    def __init__(self, tom_education_url: str, targets: List[Dict]):
+        self.tom_education_url = tom_education_url
+        self.targets = [Target(**kw) for kw in targets]
+
+@dataclass
 class Page:
     name: str
     template: jinja2.Template
     context: dict
 
 class SiteBuilder:
-    def __init__(self, config_path):
-        config = self.parse_config(config_path)
-        self.base_url = config["tom_education_url"]
-        self.targets = [Target(**info) for info in config["targets"]]
+    def __init__(self, config):
+        self.config = config
+        self.base_url = config.tom_education_url
 
         # Remove trailing slash from base URL so that JS client can always
         # append API url to base without worrying about double /
@@ -52,8 +61,10 @@ class SiteBuilder:
         self.env = jinja2.Environment(loader=jinja2.FileSystemLoader(str(template_dir)))
         self.env.globals["current_year"] = current_year()
 
-    def parse_config(self, path):
-        return yaml.safe_load(path.read_text())
+    @classmethod
+    def parse_config(cls, path: Path) -> Config:
+        config_dict = yaml.safe_load(path.read_text())
+        return Config(**config_dict)
 
     def build_site(self, outdir):
         outdir.mkdir(exist_ok=True)
@@ -72,7 +83,7 @@ class SiteBuilder:
         # Copy target preview images
         preview_images = out_static / "previews"
         preview_images.mkdir(exist_ok=True)
-        for target in self.targets:
+        for target in self.config.targets:
             dest = preview_images / target.preview_image_name()
             shutil.copyfile(target.preview_image, dest)
 
@@ -81,7 +92,7 @@ class SiteBuilder:
 
         # Create a page for each target
         target_template = self.env.get_template("asteroid.html.tmpl")
-        for target in self.targets:
+        for target in self.config.targets:
             api_url = f"/api/target/{target.pk}/"
             response = requests.get(self.base_url + api_url)
             details = response.json()
@@ -125,7 +136,13 @@ def main():
     )
     args = parser.parse_args(sys.argv[1:])
 
-    builder = SiteBuilder(args.config)
+    try:
+        config = SiteBuilder.parse_config(args.config)
+    except TypeError as ex:
+        parser.error(f"Invalid config: {ex}")
+        return
+
+    builder = SiteBuilder(config)
     builder.build_site(args.output_directory)
 
 if __name__ == "__main__":

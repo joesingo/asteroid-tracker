@@ -18,6 +18,9 @@ setup(
         'Jinja2==2.10.1',
         'requests==2.22.0',
     ],
+    extras_require={
+        'test': ['pytest'],
+    },
     packages=find_packages(),
     include_package_data=True,
     entry_points={
