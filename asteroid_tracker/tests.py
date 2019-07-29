@@ -147,3 +147,46 @@ class TestSiteBuilder:
         page = tmp_path / "mypage" / "index.html"
         assert page.exists()
         assert page.read_text() == "hello"
+
+    def test_copy_static_files(self, config, tmp_path):
+        # Make some test static files
+        in_static = tmp_path / "static"
+        in_static.mkdir()
+        (in_static / "somefile.txt").write_text("hello")
+        subdir = in_static / "dir"
+        subdir.mkdir()
+        (subdir / "anotherfile.csv").write_text("csv here")
+        # Make 'image' file for target preview
+        img_dir = tmp_path / "images"
+        img_dir.mkdir()
+        img = img_dir / "asteroid.jpg"
+        img.write_text("this is totally a JPEG")
+        config.targets = [Target(pk=42, template=1, preview_image=str(img))]
+
+        builder = SiteBuilder(config)
+        outdir = tmp_path / "out"
+        outdir.mkdir()
+        # Override builder's static dir
+        builder.static_dir = in_static
+
+        with patch("asteroid_tracker.build_site.SiteBuilder.get_pages", return_value=[]):
+            builder.build_site(outdir)
+
+        out_static = outdir / "static"
+        assert out_static.exists()
+
+        txt_file = out_static / "somefile.txt"
+        assert txt_file.exists()
+        assert txt_file.read_text() == "hello"
+
+        out_subdir = out_static / "dir"
+        assert out_static.exists()
+        csv_file = out_subdir / "anotherfile.csv"
+        assert csv_file.exists()
+        assert csv_file.read_text() == "csv here"
+
+        out_images = out_static / "previews"
+        assert out_images.exists()
+        out_preview = out_images / "42.jpg"
+        assert out_preview.exists()
+        assert out_preview.read_text() == "this is totally a JPEG"
