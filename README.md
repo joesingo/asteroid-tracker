@@ -53,11 +53,5 @@ $ python3 -m http.server
 ## Testing
 
 The tests are written with
-[pytest](https://docs.pytest.org/en/latest/index.html). To run them...
-
-```bash
-$ # Install test dependencies
-$ pip install asteroid-tracker[test]
-$ # Run tests
-$ pytest asteroid_tracker/asteroid_tracker/tests.py
-```
+[pytest](https://docs.pytest.org/en/latest/index.html). Run `./run_tests.sh` to
+run the tests and [Coverage.py](https://coverage.readthedocs.io/en/v4.5.x/).

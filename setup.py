@@ -19,7 +19,10 @@ setup(
         'requests==2.22.0',
     ],
     extras_require={
-        'test': ['pytest'],
+        'test': [
+            'pytest',
+            'coverage',
+        ],
     },
     packages=find_packages(),
     include_package_data=True,
