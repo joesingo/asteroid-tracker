@@ -1,3 +1,4 @@
+import argparse
 from dataclasses import dataclass
 from datetime import datetime
 import os.path
@@ -108,16 +109,24 @@ class SiteBuilder:
         )
 
 def main():
-    # TODO: use argparse or click or something...
-    try:
-        config_path = Path(sys.argv[1])
-        out_path = Path(sys.argv[2])
-    except IndexError:
-        print("invalid usage", file=sys.stderr)
-        sys.exit(1)
+    parser = argparse.ArgumentParser(
+        description="Create a static site to view and create timelapses of "
+                    "asteroids using an instance of the TOM Toolkit"
+    )
+    parser.add_argument(
+        "config",
+        help="Path to YAML config file",
+        type=Path
+    )
+    parser.add_argument(
+        "output_directory",
+        help="Directory to write static site to",
+        type=Path
+    )
+    args = parser.parse_args(sys.argv[1:])
 
-    builder = SiteBuilder(config_path)
-    builder.build_site(out_path)
+    builder = SiteBuilder(args.config)
+    builder.build_site(args.output_directory)
 
 if __name__ == "__main__":
     main()
