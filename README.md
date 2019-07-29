@@ -55,7 +55,7 @@ $ python3 -m http.server
 The tests are written with
 [pytest](https://docs.pytest.org/en/latest/index.html). To run them...
 
-```
+```bash
 $ # Install test dependencies
 $ pip install asteroid-tracker[test]
 $ # Run tests
