@@ -38,7 +38,7 @@ class TestConfig:
         p.write_text(yaml.dump(config))
         try:
             SiteBuilder.parse_config(p)
-        except InvalidConfigError as ex:
+        except InvalidConfigError as ex:  # pragma: no cover
             assert False, f"InvalidConfigError incorrectly raised: {ex}"
 
     def test_parse_config(self, tmp_path):
@@ -59,10 +59,6 @@ class TestSiteBuilder:
             targets=[dict(pk=1, template=1, preview_image="img", teaser="teaser")]
         )
 
-    @pytest.fixture
-    def builder(self, config):
-        return SiteBuilder(config)
-
     def test_url_trailing_slash(self, config):
         # Trailing slash should be removed
         config.tom_education_url = "http://slash.net/"
@@ -78,7 +74,7 @@ class TestSiteBuilder:
         builder = SiteBuilder(config)
         with pytest.raises(TomConnectionError) as excinfo:
             builder.build_site(tmp_path)
-            assert excinfo.value == "Could not connect to TOM at 'somethingmadeup'"
+        assert "Could not connect to TOM at 'http://somethingmadeup" in str(excinfo.value)
 
     def test_get_pages(self, config):
         config.targets = [
