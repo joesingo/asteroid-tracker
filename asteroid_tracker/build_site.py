@@ -17,13 +17,15 @@ from asteroid_tracker.exceptions import (
     TomConnectionError,
 )
 
+FACILITY = "LCO"
+
 def current_year():
     return datetime.now().strftime("%Y")
 
 @dataclass
 class Target:
     pk: int
-    template: int
+    template_name: str
     preview_image: str
     teaser: str = ""
 
@@ -112,8 +114,14 @@ class SiteBuilder:
 
             identifier = details["target"]["identifier"]
             context = {
-                "base_url": self.base_url,
-                "api_url": api_url
+                "settings": {
+                    "base_url": self.base_url,
+                    "api_url": api_url,
+                    "observe_api_url": "/api/observe/",
+                    "target_pk": target.pk,
+                    "template_name": target.template_name,
+                    "facility": FACILITY,
+                }
             }
             yield Page(name=identifier, template=target_template, context=context)
 

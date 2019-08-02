@@ -3,8 +3,7 @@ function p(x) { console.log(x); }
 
 class AsteroidApp {
     constructor(settings) {
-        this.base_url = settings.base_url;
-        this.api_url = settings.api_url;
+        this.settings = settings;
     }
 
     /*
@@ -12,13 +11,11 @@ class AsteroidApp {
      */
     async update() {
         try {
-            var data = await $.get(this.get_absolute_url(this.api_url));
+            var data = await $.get(this.get_absolute_url(this.settings.api_url));
             this.display(data);
         }
         catch(err) {
-            // TODO: show errors in the UI
-            console.error("Error updating information");
-            console.error(err);
+            this.show_error(err);
         }
     }
 
@@ -71,7 +68,7 @@ class AsteroidApp {
     }
 
     get_absolute_url(rel_url) {
-        return this.base_url + rel_url;
+        return this.settings.base_url + rel_url;
     }
 
     /*
@@ -94,11 +91,45 @@ class AsteroidApp {
         }
         throw `Unrecognised video format ${format}`;
     }
+
+    async submit_form($form) {
+        var $success_alert = $form.find(".alert-success");
+        $success_alert.hide();
+
+        var $email_input = $form.find("input[name=email]");
+        var email = $email_input.val();
+        var url = this.get_absolute_url(this.settings.observe_api_url);
+        try {
+            await $.post(url, {
+                "target": this.settings.target_pk,
+                "template_name": this.settings.template_name,
+                "facility": this.settings.facility,
+                "email": email,
+                // TODO: overrides: start and end dates
+            });
+        }
+        catch (err) {
+            this.show_error(err);
+            return;
+        }
+        // TODO: show message saying submission was successful
+        $email_input.val("");
+        $success_alert.show();
+    }
+
+    show_error(err) {
+        // TODO: show errors in the UI
+        console.error(err);
+    }
 }
 
 $(document).ready(function() {
-    var json_string = document.getElementById("asteroid-settings").textContent;
+    var json_string = $("#asteroid-settings")[0].textContent;
     var settings = JSON.parse(json_string);
     var app = new AsteroidApp(settings);
+    $("#submission-form").submit(function(e) {
+        e.preventDefault();
+        app.submit_form($(this));
+    });
     app.update();
 });

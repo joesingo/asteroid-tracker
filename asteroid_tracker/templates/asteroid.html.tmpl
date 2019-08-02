@@ -9,30 +9,33 @@
     <div class="col-md-2"></div>
 
     <div class="col-md-10">
-        {# TODO: reinstate this form! #}
-        <!-- <p> -->
-        <!--     Enter your email address and Las Cumbres Observatory will schedule -->
-        <!--     observations of <b><span class="asteroid-name">[Loading...]</span></b> -->
-        <!--     just for you! -->
-        <!-- </p> -->
-        <!-- <form action="" method="post"> -->
-        <!--     <1!-- TODO: CSRF token or similar? --1> -->
-        <!--     <div class="input-group"> -->
-        <!--         <input type="text" name="user_name" class="form-control" -->
-        <!--                placeholder="Email address..." /> -->
-        <!--         <span class="input-group-btn"> -->
-        <!--             <input type=submit value="Track!" class="btn btn-default" /> -->
-        <!--         </span> -->
-        <!--     </div> -->
-        <!-- </form> -->
+        <p>
+            Enter your email address and Las Cumbres Observatory will schedule
+            observations of <b><span class="asteroid-name">[Loading...]</span></b>
+            just for you!
+        </p>
+        <form method="post" id="submission-form">
+            <!-- TODO: CSRF token or similar? --!>
+            <div class="alert alert-success" role="alert" style="display:none;">
+              Observation scheduled successfully!
+            </div>
+            <div class="input-group">
+                <input type="text" name="email" class="form-control"
+                       placeholder="Email address..." required />
+                <span class="input-group-btn">
+                    <input type=submit value="Track!" class="btn btn-default" />
+                </span>
+            </div>
+        </form>
+        {# TODO: what is the paragraph for? No status lookup is supported atm #}
         <!-- <p> -->
         <!--     If you've already joined this campaign, enter your email address -->
         <!--     and we'll look up the status of your images. -->
         <!-- </p> -->
-        <!-- <p> -->
-        <!--     Everyone's images are automatically combined into a timelapse -->
-        <!--     video, shown below. -->
-        <!-- </p> -->
+        <p>
+            Everyone's images are automatically combined into a timelapse
+            video, shown below.
+        </p>
     </div>
 </div>
 
@@ -70,10 +73,7 @@
 
 {% block extra_js %}
 <script type="text/json" id="asteroid-settings">
-    {
-        "base_url": "{{ base_url }}",
-        "api_url": "{{ api_url }}"
-    }
+    {{ settings|tojson }}
 </script>
 <script type="text/javascript" src="/static/js/asteroid.js"></script>
 {% endblock %}

@@ -29,8 +29,8 @@ class TestConfig:
     # Test valid configs
     @pytest.mark.parametrize("config", [
         {"tom_education_url": "hello", "targets": []},
-        {"tom_education_url": "hello", "targets": [{"pk": 1, "template": 3, "preview_image": "s"}]},
-        {"tom_education_url": "hello", "targets": [{"pk": 1, "template": 3, "preview_image": "s",
+        {"tom_education_url": "hello", "targets": [{"pk": 1, "template_name": "t", "preview_image": "s"}]},
+        {"tom_education_url": "hello", "targets": [{"pk": 1, "template_name": "t", "preview_image": "s",
                                                     "teaser": "hello"}]},
     ])
     def test_valid_configs(self, config, tmp_path):
@@ -45,18 +45,18 @@ class TestConfig:
         p = tmp_path / "c.yaml"
         p.write_text(yaml.dump({
             "tom_education_url": "url",
-            "targets": [{"pk": 1, "template": 3, "preview_image": "img"}]
+            "targets": [{"pk": 1, "template_name": "t", "preview_image": "img"}]
         }))
         config = SiteBuilder.parse_config(p)
         assert config.tom_education_url == "url"
-        assert config.targets == [Target(pk=1, template=3, preview_image="img")]
+        assert config.targets == [Target(pk=1, template_name="t", preview_image="img")]
 
 class TestSiteBuilder:
     @pytest.fixture
     def config(self):
         return Config(
             tom_education_url="someurl",
-            targets=[dict(pk=1, template=1, preview_image="img", teaser="teaser")]
+            targets=[dict(pk=1, template_name="t", preview_image="img", teaser="teaser")]
         )
 
     @pytest.fixture
@@ -82,8 +82,8 @@ class TestSiteBuilder:
 
     def test_get_pages(self, config):
         config.targets = [
-            Target(pk=100, template=1, preview_image="img.png", teaser="hello"),
-            Target(pk=101, template=1, preview_image="img.png"),
+            Target(pk=100, template_name="t", preview_image="img.png", teaser="hello"),
+            Target(pk=101, template_name="t", preview_image="img.png"),
         ]
         builder = SiteBuilder(config)
 
@@ -108,8 +108,13 @@ class TestSiteBuilder:
         assert pages[1].name == "target_2"
         assert pages[2].name == ""  # home page
         # Check API URLs in context
-        assert pages[0].context["api_url"].endswith("/100/")
-        assert pages[1].context["api_url"].endswith("/101/")
+        assert "settings" in pages[0].context
+        assert set(pages[0].context["settings"].keys()) == {
+            "api_url", "facility", "target_pk", "template_name", "base_url",
+            "observe_api_url"
+        }
+        assert pages[0].context["settings"]["api_url"].endswith("/100/")
+        assert pages[1].context["settings"]["api_url"].endswith("/101/")
         # Check templates
         assert pages[0].template == pages[1].template
         assert pages[0].template != pages[2].template
@@ -161,7 +166,7 @@ class TestSiteBuilder:
         img_dir.mkdir()
         img = img_dir / "asteroid.jpg"
         img.write_text("this is totally a JPEG")
-        config.targets = [Target(pk=42, template=1, preview_image=str(img))]
+        config.targets = [Target(pk=42, template_name="t", preview_image=str(img))]
 
         builder = SiteBuilder(config)
         outdir = tmp_path / "out"
