@@ -99,13 +99,27 @@ class AsteroidApp {
         var $email_input = $form.find("input[name=email]");
         var email = $email_input.val();
         var url = this.get_absolute_url(this.settings.observe_api_url);
+
+        // Construct start and end dates for observation based on current
+        // time
+        var start = new Date();
+        var end = new Date(start.valueOf() + 7 * 24 * 60 * 60 * 1000);  // + 7 days for end date
+
         try {
-            await $.post(url, {
+            var payload = {
                 "target": this.settings.target_pk,
                 "template_name": this.settings.template_name,
                 "facility": this.settings.facility,
                 "email": email,
-                // TODO: overrides: start and end dates
+                "overrides": {
+                    "start": start.toISOString(),
+                    "end": end.toISOString()
+                }
+            };
+            await $.post({
+                "url": url,
+                "data": JSON.stringify(payload),
+                "contentType": "application/json; charset=utf-8"
             });
         }
         catch (err) {
