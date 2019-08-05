@@ -181,3 +181,7 @@ footer { padding-top:50px;text-align: center;}
  .panels .panel-item:first-child .panel-big {
      margin-top: 30px
  }
+
+#alerts .alert {
+    display: none;
+}

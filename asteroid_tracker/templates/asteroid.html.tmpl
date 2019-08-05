@@ -16,9 +16,17 @@
         </p>
         <form method="post" id="submission-form">
             <!-- TODO: CSRF token or similar? --!>
-            <div class="alert alert-success" role="alert" style="display:none;">
-              Observation scheduled successfully!
+
+            <!-- Errors -->
+            <div id="alerts">
+                <div class="alert alert-danger" role="alert">
+                </div>
+
+                <div class="alert alert-success" role="alert">
+                  Observation scheduled successfully!
+                </div>
             </div>
+
             <div class="input-group">
                 <input type="text" name="email" class="form-control"
                        placeholder="Email address..." required />

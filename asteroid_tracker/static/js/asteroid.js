@@ -1,6 +1,10 @@
 // Just for debugging
 function p(x) { console.log(x); }
 
+var $ALERTS_WRAPPER = $("#alerts");
+var $SUCCESS_ALERT = $ALERTS_WRAPPER.find(".alert-success");
+var $ERROR_ALERT = $ALERTS_WRAPPER.find(".alert-danger");
+
 class AsteroidApp {
     constructor(settings) {
         this.settings = settings;
@@ -93,8 +97,8 @@ class AsteroidApp {
     }
 
     async submit_form($form) {
-        var $success_alert = $form.find(".alert-success");
-        $success_alert.hide();
+        $SUCCESS_ALERT.hide();
+        $ERROR_ALERT.hide();
 
         var $email_input = $form.find("input[name=email]");
         var email = $email_input.val();
@@ -126,14 +130,20 @@ class AsteroidApp {
             this.show_error(err);
             return;
         }
-        // TODO: show message saying submission was successful
         $email_input.val("");
-        $success_alert.show();
+        $SUCCESS_ALERT.show();
     }
 
     show_error(err) {
-        // TODO: show errors in the UI
         console.error(err);
+        if (err.status == 400) {
+            var errs = Object.values(err.responseJSON);
+            $ERROR_ALERT.html(errs.join("<br />"));
+        }
+        else {
+            $ERROR_ALERT.text("Error connecting to TOM education API");
+        }
+        $ERROR_ALERT.show();
     }
 }
 
