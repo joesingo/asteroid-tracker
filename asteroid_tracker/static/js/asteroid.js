@@ -93,22 +93,30 @@ class AsteroidApp {
             case "webm":
                 return "video/webm";
         }
-        throw `Unrecognised video format ${format}`;
+        throw new Error(`Unrecognised video format ${format}`);
     }
 
     async submit_form($form) {
         $SUCCESS_ALERT.hide();
         $ERROR_ALERT.hide();
 
+        var $form_els = $form.find("input");
         var $email_input = $form.find("input[name=email]");
+        var $submit_button = $form.find("input[type=submit]");
+        $form_els.prop("disabled", true);
+
+        // Change text of submit button to a loading message
+        var old_submit_value = $submit_button.val();
+        $submit_button.val("Loading...");
+
         var email = $email_input.val();
         var url = this.get_absolute_url(this.settings.observe_api_url);
-
         // Construct start and end dates for observation based on current
         // time
         var start = new Date();
         var end = new Date(start.valueOf() + 7 * 24 * 60 * 60 * 1000);  // + 7 days for end date
 
+        var error = false;
         try {
             var payload = {
                 "target": this.settings.target_pk,
@@ -127,11 +135,18 @@ class AsteroidApp {
             });
         }
         catch (err) {
+            error = true;
             this.show_error(err);
-            return;
         }
-        $email_input.val("");
-        $SUCCESS_ALERT.show();
+        finally {
+            $form_els.prop("disabled", false);
+            $submit_button.val(old_submit_value);
+        }
+
+        if (!error) {
+            $email_input.val("");
+            $SUCCESS_ALERT.show();
+        }
     }
 
     show_error(err) {
