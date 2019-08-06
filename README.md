@@ -18,7 +18,7 @@ EXTRA_FIELDS = [
 ```
 * Create targets and populate `target_info` in tags section
 * Create an observation template for each target
-* Create `config.yaml` as follows (change the target and template PKs as
+* Create `config.yaml` as follows (change the target and template names as
   appropriate):
 ```yaml
 tom_education_url: "http://localhost:8000",
@@ -32,9 +32,9 @@ targets:
     template_name: another-template
     preview_image: /path/to/another/image.png
 ```
-* Set `CORS_ORIGIN_WHITELIST` in `settings.py` to include the host from which
-  Asteroid Tracker will be hosted (alternatively, set `CORS_ORIGIN_ALLOW_ALL`
-  to `True`):
+* If serving Asteroid Tracker and the `tom_education` site from different hosts,
+  set `CORS_ORIGIN_WHITELIST` in `settings.py` to include the Asteroid Tracker
+  host (alternatively, set `CORS_ORIGIN_ALLOW_ALL` to `True`). E.g:
 ```python
 CORS_ORIGIN_WHITELIST = [
     'http://localhost:5000',
