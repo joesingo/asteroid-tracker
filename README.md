@@ -1,6 +1,9 @@
 # Asteroid Tracker
 
-**TODO:** description
+**TODO:**
+* Description of the project
+* Explain `target_info` and markdown dialect
+* Explain that active/past on homepage is determined when the site is exported
 
 ## Installation
 
@@ -10,16 +13,18 @@ $ git clone <this repo>
 $ pip install asteroid-tracker
 ```
 * Set up a [tom_education](https://github.com/joesingo/tom_education) instance
-* Add `target_info` to `EXTRA_FIELDS` in `settings.py`
+* Add `active` and `target_info` to `EXTRA_FIELDS` in `settings.py` in the
+  `tom_education` app
 ```python
 EXTRA_FIELDS = [
-    {'name': 'target_info', 'type': 'string'}
+    {'name': 'active', 'type': 'boolean'},
+    {'name': 'target_info', 'type': 'string', 'hidden': True},
 ]
 ```
-* Create targets and populate `target_info` in tags section
+* Create targets and populate `target_info`. Check the `active` checkbox if the
+  new observations should be allowed for the target
 * Create an observation template for each target
-* Create `config.yaml` as follows (change the target and template names as
-  appropriate):
+* Create `config.yaml` with the following structure:
 ```yaml
 tom_education_url: "http://localhost:8000",
 targets:
@@ -32,14 +37,6 @@ targets:
     template_name: another-template
     preview_image: /path/to/another/image.png
 ```
-* If serving Asteroid Tracker and the `tom_education` site from different hosts,
-  set `CORS_ORIGIN_WHITELIST` in `settings.py` to include the Asteroid Tracker
-  host (alternatively, set `CORS_ORIGIN_ALLOW_ALL` to `True`). E.g:
-```python
-CORS_ORIGIN_WHITELIST = [
-    'http://localhost:5000',
-]
-```
 * Export your asteroid tracker instance as a static website:
 ```
 $ ast-tracker <path to config.yaml> <output dir>
@@ -48,6 +45,27 @@ $ ast-tracker <path to config.yaml> <output dir>
 ```
 $ cd <output dir>
 $ python3 -m http.server
+```
+
+### CORS headers
+
+If serving Asteroid Tracker and the `tom_education` site from different hosts
+(including serving from different ports on the same host), the `tom_education`
+server will need to send the appropriate
+[CORS](https://en.wikipedia.org/wiki/Cross-origin_resource_sharing) headers to
+allow Ajax requests from the Asteroid Tracker site to work:
+
+* Install `django-cors-headers`
+```
+$ pip install django-cors-headers
+```
+* Add `corsheaders` to `INSTALLED_APPS` in `settings.py`
+* Set `CORS_ORIGIN_WHITELIST` in `settings.py` to include the Asteroid Tracker
+host (alternatively, set `CORS_ORIGIN_ALLOW_ALL` to `True`). E.g:
+```python
+CORS_ORIGIN_WHITELIST = [
+    'http://localhost:5000',
+]
 ```
 
 ## Testing

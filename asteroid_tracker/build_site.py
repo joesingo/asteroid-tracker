@@ -130,7 +130,8 @@ class SiteBuilder:
                 "url": f"/{identifier}",
                 "name": details["target"]["name"],
                 "image_name": target.preview_image_name(),
-                "teaser": target.teaser
+                "teaser": target.teaser,
+                "active": details["target"]["extra_fields"].get("active"),
             })
 
         # Home page

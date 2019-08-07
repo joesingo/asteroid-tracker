@@ -95,7 +95,8 @@ class TestSiteBuilder:
                     return {
                         "target": {
                             "identifier": f"target_{self.times_called}",
-                            "name": "Cool target"
+                            "name": "Cool target",
+                            "extra_fields": {"active": False},
                         }
                     }
 
@@ -125,11 +126,13 @@ class TestSiteBuilder:
                 "name": "Cool target",
                 "image_name": "100.png",
                 "teaser": "hello",
+                "active": False,
             }, {
                 "url": "/target_2",
                 "name": "Cool target",
                 "image_name": "101.png",
                 "teaser": "",
+                "active": False,
             }]
         }
 

@@ -36,6 +36,11 @@ class AsteroidApp {
         var converter = new showdown.Converter();
         $info_section.html(converter.makeHtml(markdown));
 
+        // Show form if campaign is active
+        if (data.target.extra_fields.active) {
+            $("#form-wrapper").show();
+        }
+
         // Timelapses
         var $timelapse_area = $("#asteroid-timelapses");
         var $no_timelapse_area = $("#no-timelapses");

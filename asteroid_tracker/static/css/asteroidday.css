@@ -182,6 +182,6 @@ footer { padding-top:50px;text-align: center;}
      margin-top: 30px
  }
 
-#alerts .alert {
+#alerts .alert, #form-wrapper {
     display: none;
 }
