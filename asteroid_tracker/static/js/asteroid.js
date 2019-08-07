@@ -156,7 +156,7 @@ class AsteroidApp {
 
     show_error(err) {
         console.error(err);
-        if (err.status == 400) {
+        if (err.status == 400 || err.status == 404) {
             var errs = Object.values(err.responseJSON);
             $ERROR_ALERT.html(errs.join("<br />"));
         }
