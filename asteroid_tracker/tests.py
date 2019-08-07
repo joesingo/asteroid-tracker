@@ -103,11 +103,13 @@ class TestSiteBuilder:
             mock.get.return_value = FakeResponse()
             pages = list(builder.get_pages())
 
-        assert len(pages) == 3
+        assert len(pages) == 5
         # Check names
         assert pages[0].name == "target_1"
         assert pages[1].name == "target_2"
         assert pages[2].name == ""  # home page
+        assert pages[3].name == "about"
+        assert pages[4].name == "education"
         # Check API URLs in context
         assert "settings" in pages[0].context
         assert set(pages[0].context["settings"].keys()) == {

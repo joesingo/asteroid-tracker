@@ -1,5 +1,5 @@
 import argparse
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 from datetime import datetime
 import os.path
 from pathlib import Path
@@ -50,7 +50,7 @@ class Config:
 class Page:
     name: str
     template: jinja2.Template
-    context: dict
+    context: dict = field(default_factory=dict)
 
 class SiteBuilder:
     def __init__(self, config):
@@ -140,6 +140,10 @@ class SiteBuilder:
             template=self.env.get_template("home.html.tmpl"),
             context=home_context
         )
+
+        # About and Education pages
+        yield Page(name="about", template=self.env.get_template("about.html.tmpl"))
+        yield Page(name="education", template=self.env.get_template("education.html.tmpl"))
 
 def main():  # pragma: no cover
     parser = argparse.ArgumentParser(
