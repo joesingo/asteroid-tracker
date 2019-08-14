@@ -50,10 +50,11 @@ $ python3 -m http.server 5000
 ### CORS headers
 
 If serving Asteroid Tracker and the `tom_education` site from different hosts
-(including serving from different ports on the same host), the `tom_education`
-server will need to send the appropriate
-[CORS](https://en.wikipedia.org/wiki/Cross-origin_resource_sharing) headers to
-allow Ajax requests from the Asteroid Tracker site to work:
+(including using different ports on the same host), the `tom_education` server
+will need to send the appropriate
+[CORS](https://en.wikipedia.org/wiki/Cross-origin_resource_sharing) headers so
+that the browser will allow Ajax requests from Asteroid Tracker to
+`tom_education`:
 
 * Install `django-cors-headers`
 ```
