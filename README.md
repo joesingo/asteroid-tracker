@@ -44,7 +44,7 @@ $ ast-tracker <path to config.yaml> <output dir>
 * (Optional) Serve the site with built-in Python HTTP server:
 ```
 $ cd <output dir>
-$ python3 -m http.server
+$ python3 -m http.server 5000
 ```
 
 ### CORS headers
