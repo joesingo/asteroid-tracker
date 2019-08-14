@@ -61,8 +61,17 @@ that the browser will allow Ajax requests from Asteroid Tracker to
 $ pip install django-cors-headers
 ```
 * Add `corsheaders` to `INSTALLED_APPS` in `settings.py`
-* Set `CORS_ORIGIN_WHITELIST` in `settings.py` to include the Asteroid Tracker
-host (alternatively, set `CORS_ORIGIN_ALLOW_ALL` to `True`). E.g:
+* Add the `CorsMiddleware` in `MIDDLEWARE`
+```python
+MIDDLEWARE = [
+    ...
+    'corsheaders.middleware.CorsMiddleware',
+    'django.middleware.common.CommonMiddleware',
+    ...
+]
+```
+* Set `CORS_ORIGIN_WHITELIST` to include the Asteroid Tracker host
+* (alternatively, set `CORS_ORIGIN_ALLOW_ALL` to `True`). E.g:
 ```python
 CORS_ORIGIN_WHITELIST = [
     'http://localhost:5000',
