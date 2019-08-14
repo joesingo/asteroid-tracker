@@ -1,0 +1,4 @@
+include README.md
+recursive-include asteroid_tracker/templates *
+recursive-include asteroid_tracker/static *
+
